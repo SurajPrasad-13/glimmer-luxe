@@ -99,11 +99,11 @@ function Cart() {
                   <span className="font-display text-3xl text-gold-gradient">{formatINR(total)}</span>
                 </div>
 
-                <button
-                  onClick={() => toast.success("Proceeding to checkout…")}
+                <Link
+                  to="/checkout"
                   className="mt-8 w-full rounded-full bg-gold-gradient py-4 text-xs uppercase tracking-[0.3em] font-medium text-[color:var(--charcoal)] shadow-glow flex items-center justify-center gap-2 hover:opacity-90 transition">
                   Secure Checkout <ArrowRight className="h-4 w-4" />
-                </button>
+                </Link>
 
                 <Link to="/shop" className="mt-3 block text-center text-xs uppercase tracking-[0.25em] text-muted-foreground hover:text-[color:var(--gold)]">
                   Continue Shopping
