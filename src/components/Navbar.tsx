@@ -66,9 +66,9 @@ export function Navbar() {
               <button onClick={() => setSearchOpen(true)} className="p-2 hover:text-[color:var(--gold)] transition" aria-label="Search">
                 <Search className="h-[18px] w-[18px]" />
               </button>
-              <button className="hidden sm:block p-2 hover:text-[color:var(--gold)] transition" aria-label="Account">
+              <Link to="/account" className="hidden sm:block p-2 hover:text-[color:var(--gold)] transition" aria-label="Account">
                 <User className="h-[18px] w-[18px]" />
-              </button>
+              </Link>
               <button className="p-2 hover:text-[color:var(--gold)] transition" aria-label="Wishlist">
                 <Heart className="h-[18px] w-[18px]" />
               </button>
