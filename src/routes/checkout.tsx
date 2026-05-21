@@ -883,7 +883,7 @@ function StepHeader({ title, sub }: { title: string; sub: string }) {
 }
 
 /* ---------- SUCCESS ---------- */
-type OrderSummary = NonNullable<ReturnType<typeof useState<any>>[0]>;
+
 
 function SuccessScreen({ order }: { order: any }) {
   const navigate = useNavigate();
