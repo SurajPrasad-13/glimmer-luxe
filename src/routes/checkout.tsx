@@ -1154,7 +1154,7 @@ function SuccessScreen({ order }: { order: any }) {
                 onClick={downloadReceipt}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs uppercase tracking-[0.2em] border border-[color:var(--gold)]/40 text-[color:var(--gold)] hover:bg-[color:var(--gold)]/10 transition"
               >
-                <Download className="h-3.5 w-3.5" /> Download Receipt
+                <Download className="h-3.5 w-3.5" /> Download PDF Receipt
               </button>
             </div>
 
