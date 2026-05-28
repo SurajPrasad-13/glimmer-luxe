@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -886,53 +886,195 @@ function StepHeader({ title, sub }: { title: string; sub: string }) {
 
 
 function SuccessScreen({ order }: { order: any }) {
-  const navigate = useNavigate();
+  
 
-  const downloadReceipt = () => {
-    const lines: string[] = [];
-    lines.push("AURÉLIA · HEIRLOOM FINE JEWELLERY");
-    lines.push("Order Receipt");
-    lines.push("====================================");
-    lines.push(`Order ID    : ${order.orderId}`);
-    lines.push(`Placed      : ${order.placedAt}`);
-    lines.push(`Payment     : ${order.paymentLabel}`);
-    lines.push(`Delivery    : ${order.deliveryLabel}`);
-    lines.push(`Gift Wrap   : ${order.wrapLabel}`);
-    if (order.giftMsg) lines.push(`Gift Message: "${order.giftMsg}"`);
-    lines.push("");
-    lines.push("Shipping Address");
-    lines.push("------------------------------------");
-    lines.push(`${order.address.name}`);
-    lines.push(`${order.address.line}`);
-    lines.push(`${order.address.city}, ${order.address.state} ${order.address.pin}`);
-    lines.push(`${order.address.phone}`);
-    lines.push("");
-    lines.push("Items");
-    lines.push("------------------------------------");
-    order.items.forEach((i: CartItem) => {
-      lines.push(`${i.name.padEnd(34)} ${i.metal.padEnd(10)} x${i.qty}  ${formatINR(i.price * i.qty)}`);
+  // Persist order so the tracking page can read it
+  useEffect(() => {
+    try {
+      const payload = {
+        orderId: order.orderId,
+        placedAt: order.placedAt,
+        total: order.total,
+        deliveryLabel: order.deliveryLabel,
+        paymentLabel: order.paymentLabel,
+        address: order.address,
+        items: order.items.map((i: CartItem) => ({
+          id: i.id, name: i.name, metal: i.metal, qty: i.qty, price: i.price, image: i.image,
+        })),
+      };
+      localStorage.setItem(`aurelia-order-${order.orderId}`, JSON.stringify(payload));
+    } catch {/* ignore */}
+  }, [order]);
+
+  const downloadReceipt = async () => {
+    const { jsPDF } = await import("jspdf");
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const W = doc.internal.pageSize.getWidth();
+    const GOLD: [number, number, number] = [201, 162, 76];
+    const INK: [number, number, number] = [28, 28, 32];
+    const MUTED: [number, number, number] = [120, 120, 128];
+    const LINE: [number, number, number] = [220, 214, 198];
+    const inr = (n: number) => "Rs. " + n.toLocaleString("en-IN");
+
+    // Header band
+    doc.setFillColor(...INK);
+    doc.rect(0, 0, W, 110, "F");
+    doc.setFillColor(...GOLD);
+    doc.rect(0, 110, W, 3, "F");
+
+    doc.setTextColor(...GOLD);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text("HEIRLOOM FINE JEWELLERY", 40, 40, { charSpace: 3 });
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("times", "italic");
+    doc.setFontSize(36);
+    doc.text("Aurélia", 40, 80);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(230, 220, 190);
+    doc.text("OFFICIAL RECEIPT", W - 40, 40, { align: "right", charSpace: 2 });
+    doc.setFontSize(10);
+    doc.setTextColor(255, 255, 255);
+    doc.text(order.orderId, W - 40, 60, { align: "right" });
+    doc.setFontSize(9);
+    doc.setTextColor(200, 200, 210);
+    doc.text(order.placedAt, W - 40, 76, { align: "right" });
+
+    let y = 150;
+    doc.setTextColor(...INK);
+    doc.setFont("times", "normal");
+    doc.setFontSize(20);
+    doc.text("Thank you for your order", 40, y);
+    y += 18;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...MUTED);
+    doc.text("Each piece is hand-finished, hallmark certified and insured in transit.", 40, y);
+
+    // Two columns: Bill to / Order info
+    y += 28;
+    doc.setDrawColor(...LINE);
+    doc.line(40, y, W - 40, y);
+    y += 22;
+    doc.setFontSize(8);
+    doc.setTextColor(...GOLD);
+    doc.text("SHIPPED TO", 40, y, { charSpace: 2 });
+    doc.text("ORDER DETAILS", W / 2 + 10, y, { charSpace: 2 });
+    y += 14;
+    doc.setTextColor(...INK);
+    doc.setFontSize(10);
+    doc.text(order.address.name, 40, y);
+    doc.text(`Order ID:  ${order.orderId}`, W / 2 + 10, y);
+    y += 14;
+    doc.setTextColor(...MUTED);
+    doc.text(order.address.line, 40, y);
+    doc.setTextColor(...INK);
+    doc.text(`Placed:    ${order.placedAt}`, W / 2 + 10, y);
+    y += 14;
+    doc.setTextColor(...MUTED);
+    doc.text(`${order.address.city}, ${order.address.state} ${order.address.pin}`, 40, y);
+    doc.setTextColor(...INK);
+    doc.text(`Payment:   ${order.paymentLabel}`, W / 2 + 10, y);
+    y += 14;
+    doc.setTextColor(...MUTED);
+    doc.text(order.address.phone, 40, y);
+    doc.setTextColor(...INK);
+    doc.text(`Delivery:  ${order.deliveryLabel}`, W / 2 + 10, y);
+    y += 14;
+    doc.text(`Gift Wrap: ${order.wrapLabel}`, W / 2 + 10, y);
+
+    // Items table
+    y += 30;
+    doc.setFillColor(...INK);
+    doc.rect(40, y, W - 80, 26, "F");
+    doc.setTextColor(...GOLD);
+    doc.setFontSize(8);
+    doc.text("ITEM", 52, y + 17, { charSpace: 2 });
+    doc.text("METAL", 290, y + 17, { charSpace: 2 });
+    doc.text("QTY", 380, y + 17, { charSpace: 2 });
+    doc.text("AMOUNT", W - 52, y + 17, { align: "right", charSpace: 2 });
+    y += 26;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    order.items.forEach((i: CartItem, idx: number) => {
+      if (idx % 2 === 1) {
+        doc.setFillColor(248, 246, 240);
+        doc.rect(40, y, W - 80, 26, "F");
+      }
+      doc.setTextColor(...INK);
+      doc.text(i.name, 52, y + 17);
+      doc.setTextColor(...MUTED);
+      doc.text(i.metal, 290, y + 17);
+      doc.text(String(i.qty), 380, y + 17);
+      doc.setTextColor(...INK);
+      doc.text(inr(i.price * i.qty), W - 52, y + 17, { align: "right" });
+      y += 26;
     });
-    lines.push("");
-    lines.push("Totals");
-    lines.push("------------------------------------");
-    lines.push(`Subtotal       : ${formatINR(order.subtotal)}`);
-    lines.push(`Shipping       : ${order.shipping === 0 ? "Free" : formatINR(order.shipping)}`);
-    if (order.wrapping > 0) lines.push(`Gift Wrap      : ${formatINR(order.wrapping)}`);
-    if (order.discount > 0) lines.push(`Discount${order.promo ? ` (${order.promo})` : ""}: -${formatINR(order.discount)}`);
-    lines.push(`GST (3%)       : ${formatINR(order.tax)}`);
-    lines.push(`TOTAL PAID     : ${formatINR(order.total)}`);
-    lines.push("");
-    lines.push("Thank you for choosing Aurélia.");
-    lines.push("Lifetime exchange · Hallmark certified · Free re-polishing");
 
-    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `aurelia-receipt-${order.orderId}.txt`;
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+    // Totals
+    y += 18;
+    const totalsX = W - 260;
+    const drawRow = (k: string, v: string, bold = false) => {
+      doc.setFont("helvetica", bold ? "bold" : "normal");
+      doc.setTextColor(...(bold ? INK : MUTED));
+      doc.text(k, totalsX, y);
+      doc.setTextColor(...INK);
+      doc.text(v, W - 52, y, { align: "right" });
+      y += 16;
+    };
+    drawRow("Subtotal", inr(order.subtotal));
+    drawRow("Shipping", order.shipping === 0 ? "Free" : inr(order.shipping));
+    if (order.wrapping > 0) drawRow("Gift Wrap", inr(order.wrapping));
+    if (order.discount > 0) drawRow(`Discount${order.promo ? ` (${order.promo})` : ""}`, "- " + inr(order.discount));
+    drawRow("GST (3%)", inr(order.tax));
+
+    y += 6;
+    doc.setDrawColor(...GOLD);
+    doc.setLineWidth(1);
+    doc.line(totalsX, y, W - 52, y);
+    y += 18;
+    doc.setFont("times", "normal");
+    doc.setFontSize(14);
+    doc.setTextColor(...INK);
+    doc.text("TOTAL PAID", totalsX, y);
+    doc.setTextColor(...GOLD);
+    doc.text(inr(order.total), W - 52, y, { align: "right" });
+
+    if (order.giftMsg) {
+      y += 30;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(...GOLD);
+      doc.text("GIFT MESSAGE", 40, y, { charSpace: 2 });
+      y += 14;
+      doc.setFontSize(10);
+      doc.setTextColor(...INK);
+      doc.setFont("times", "italic");
+      doc.text(`"${order.giftMsg}"`, 40, y, { maxWidth: W - 80 });
+    }
+
+    // Footer
+    const fy = doc.internal.pageSize.getHeight() - 70;
+    doc.setDrawColor(...LINE);
+    doc.line(40, fy, W - 40, fy);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...MUTED);
+    doc.text("Lifetime exchange  ·  Hallmark certified  ·  Complimentary re-polishing", W / 2, fy + 18, { align: "center" });
+    doc.setTextColor(...GOLD);
+    doc.setFontSize(8);
+    doc.text("aurelia.com  ·  concierge@aurelia.com  ·  +91 1800 266 0000", W / 2, fy + 34, { align: "center", charSpace: 1 });
+    doc.setTextColor(...MUTED);
+    doc.setFontSize(7);
+    doc.text("This receipt also serves as a certificate of authenticity for the pieces listed above.", W / 2, fy + 50, { align: "center" });
+
+    doc.save(`aurelia-receipt-${order.orderId}.pdf`);
     toast.success("Receipt downloaded");
   };
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -1012,7 +1154,7 @@ function SuccessScreen({ order }: { order: any }) {
                 onClick={downloadReceipt}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs uppercase tracking-[0.2em] border border-[color:var(--gold)]/40 text-[color:var(--gold)] hover:bg-[color:var(--gold)]/10 transition"
               >
-                <Download className="h-3.5 w-3.5" /> Download Receipt
+                <Download className="h-3.5 w-3.5" /> Download PDF Receipt
               </button>
             </div>
 
@@ -1063,12 +1205,13 @@ function SuccessScreen({ order }: { order: any }) {
             </div>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => navigate({ to: "/account" })}
-                className="px-6 py-3 rounded-xl text-xs uppercase tracking-[0.25em] bg-gold-gradient text-[color:var(--charcoal)] font-medium shadow-luxe"
+              <Link
+                to="/track/$orderId"
+                params={{ orderId: order.orderId }}
+                className="px-6 py-3 rounded-xl text-xs uppercase tracking-[0.25em] bg-gold-gradient text-[color:var(--charcoal)] font-medium shadow-luxe text-center"
               >
                 Track Order
-              </button>
+              </Link>
               <Link
                 to="/shop"
                 className="px-6 py-3 rounded-xl text-xs uppercase tracking-[0.25em] border border-[color:var(--glass-border)] hover:border-[color:var(--gold)] hover:text-[color:var(--gold)] transition text-center"
