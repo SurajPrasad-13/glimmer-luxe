@@ -48,7 +48,7 @@ function TrackPage() {
 
   // Deterministic "progress" based on order ID so reloads stay consistent
   const stageIndex = useMemo(() => {
-    const seed = orderId.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const seed = orderId.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
     return seed % (STAGES.length - 1) + 1; // 1..5
   }, [orderId]);
 
