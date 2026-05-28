@@ -886,7 +886,7 @@ function StepHeader({ title, sub }: { title: string; sub: string }) {
 
 
 function SuccessScreen({ order }: { order: any }) {
-  const navigate = useNavigate();
+  
 
   // Persist order so the tracking page can read it
   useEffect(() => {
