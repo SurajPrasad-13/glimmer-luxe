@@ -1205,12 +1205,13 @@ function SuccessScreen({ order }: { order: any }) {
             </div>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => navigate({ to: "/account" })}
-                className="px-6 py-3 rounded-xl text-xs uppercase tracking-[0.25em] bg-gold-gradient text-[color:var(--charcoal)] font-medium shadow-luxe"
+              <Link
+                to="/track/$orderId"
+                params={{ orderId: order.orderId }}
+                className="px-6 py-3 rounded-xl text-xs uppercase tracking-[0.25em] bg-gold-gradient text-[color:var(--charcoal)] font-medium shadow-luxe text-center"
               >
                 Track Order
-              </button>
+              </Link>
               <Link
                 to="/shop"
                 className="px-6 py-3 rounded-xl text-xs uppercase tracking-[0.25em] border border-[color:var(--glass-border)] hover:border-[color:var(--gold)] hover:text-[color:var(--gold)] transition text-center"
