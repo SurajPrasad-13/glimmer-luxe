@@ -306,7 +306,7 @@ function CheckoutPage() {
                   {items.map((i) => (
                     <div key={i.id} className="flex gap-3">
                       <div className="h-16 w-16 rounded-xl overflow-hidden glass shrink-0">
-                        <img src={i.image} alt={i.name} className="h-full w-full object-cover" />
+                        <img loading="lazy" decoding="async" src={i.image} alt={i.name} className="h-full w-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-display truncate">{i.name}</p>
@@ -828,7 +828,7 @@ function UPIForm({
       ) : (
         <div className="rounded-2xl border border-[color:var(--glass-border)] bg-white/[0.03] p-6 flex flex-col sm:flex-row items-center gap-6">
           <div className="rounded-2xl bg-white p-3 shrink-0">
-            <img src={qrSrc} alt="UPI QR code" className="h-44 w-44" />
+            <img loading="lazy" decoding="async" src={qrSrc} alt="UPI QR code" className="h-44 w-44" />
           </div>
           <div className="flex-1 text-center sm:text-left">
             <p className="text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)] flex items-center justify-center sm:justify-start gap-2">
@@ -1178,7 +1178,7 @@ function SuccessScreen({ order }: { order: any }) {
               {order.items.map((i: CartItem) => (
                 <div key={i.id} className="flex items-center gap-4">
                   <div className="h-14 w-14 rounded-xl overflow-hidden glass shrink-0">
-                    <img src={i.image} alt={i.name} className="h-full w-full object-cover" />
+                    <img loading="lazy" decoding="async" src={i.image} alt={i.name} className="h-full w-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-display">{i.name}</p>

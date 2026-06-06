@@ -195,7 +195,7 @@ function TrackPage() {
                 {order.items.map((i) => (
                   <div key={i.id} className="flex items-center gap-4">
                     <div className="h-14 w-14 rounded-xl overflow-hidden glass shrink-0">
-                      <img src={i.image} alt={i.name} className="h-full w-full object-cover" />
+                      <img loading="lazy" decoding="async" src={i.image} alt={i.name} className="h-full w-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-display truncate">{i.name}</p>

@@ -52,7 +52,7 @@ function Cart() {
                   initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
                   className="glass rounded-2xl p-4 lg:p-6 flex gap-4 lg:gap-6"
                 >
-                  <img src={item.image} alt={item.name} className="h-28 w-28 lg:h-36 lg:w-36 rounded-xl object-cover" />
+                  <img loading="lazy" decoding="async" src={item.image} alt={item.name} className="h-28 w-28 lg:h-36 lg:w-36 rounded-xl object-cover" />
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{item.metal} · {item.category}</p>
                     <h3 className="mt-1 font-display text-xl truncate">{item.name}</h3>
