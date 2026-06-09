@@ -150,7 +150,7 @@ function Home() {
                 viewport={{ once: true }} transition={{ duration: 0.7, delay: i * 0.1 }}
                 className="group relative aspect-[3/4] rounded-3xl overflow-hidden shadow-luxe"
               >
-                <img src={c.image} alt={c.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
+                <LazyImage src={c.image} alt={c.name} wrapperClassName="h-full w-full" className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-8">
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">{c.tag}</p>
