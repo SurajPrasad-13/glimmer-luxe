@@ -91,7 +91,7 @@ function Home() {
             className="lg:col-span-6 relative"
           >
             <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-luxe glass">
-              <img src={hero} alt="Diamond necklace" width={1600} height={1280} className="h-full w-full object-cover" />
+              <LazyImage src={hero} alt="Diamond necklace" eager width={1600} height={1280} wrapperClassName="h-full w-full" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
               <motion.div
                 animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity }}
