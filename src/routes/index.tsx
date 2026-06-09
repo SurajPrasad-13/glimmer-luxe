@@ -188,7 +188,7 @@ function Home() {
             viewport={{ once: true }} transition={{ duration: 0.8 }}
             className="relative aspect-[5/4] rounded-3xl overflow-hidden shadow-luxe"
           >
-            <img src={craft} alt="Craftsmanship" loading="lazy" className="h-full w-full object-cover" />
+            <LazyImage src={craft} alt="Craftsmanship" wrapperClassName="h-full w-full" className="h-full w-full object-cover" />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }}
