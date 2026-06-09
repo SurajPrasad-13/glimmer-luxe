@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
+import { LazyImage } from "@/components/LazyImage";
 import { ProductCard } from "@/components/ProductCard";
 import { products, formatINR } from "@/lib/products";
 import { toast } from "sonner";
@@ -64,7 +65,7 @@ function ProductPage() {
           {/* Gallery */}
           <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }} className="space-y-4">
             <div className="relative aspect-square rounded-3xl overflow-hidden glass shadow-luxe group">
-              <img loading="lazy" decoding="async" src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+              <LazyImage src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" wrapperClassName="h-full w-full" />
               {product.badge && (
                 <span className="absolute top-5 left-5 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest bg-gold-gradient text-[color:var(--charcoal)]">
                   {product.badge}
@@ -74,7 +75,7 @@ function ProductPage() {
             <div className="grid grid-cols-4 gap-3">
               {[0,1,2,3].map(i => (
                 <button key={i} className="aspect-square rounded-xl overflow-hidden glass hover:border-[color:var(--gold)] transition">
-                  <img loading="lazy" decoding="async" src={product.image} alt="" className="h-full w-full object-cover opacity-80 hover:opacity-100" />
+                  <LazyImage src={product.image} alt="" className="h-full w-full object-cover opacity-80 hover:opacity-100" wrapperClassName="h-full w-full" />
                 </button>
               ))}
             </div>

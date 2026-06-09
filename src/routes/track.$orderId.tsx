@@ -8,6 +8,7 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
+import { LazyImage } from "@/components/LazyImage";
 import { formatINR } from "@/lib/products";
 import { toast } from "sonner";
 
@@ -195,7 +196,7 @@ function TrackPage() {
                 {order.items.map((i) => (
                   <div key={i.id} className="flex items-center gap-4">
                     <div className="h-14 w-14 rounded-xl overflow-hidden glass shrink-0">
-                      <img loading="lazy" decoding="async" src={i.image} alt={i.name} className="h-full w-full object-cover" />
+                      <LazyImage src={i.image} alt={i.name} className="h-full w-full object-cover" wrapperClassName="h-full w-full" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-display truncate">{i.name}</p>
