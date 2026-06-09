@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Heart, Eye } from "lucide-react";
+import { LazyImage } from "@/components/LazyImage";
 import { type Product, formatINR } from "@/lib/products";
 import { toast } from "sonner";
 
