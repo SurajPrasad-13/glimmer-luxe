@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { ProductCard } from "@/components/ProductCard";
+import { LazyImage } from "@/components/LazyImage";
 import { products } from "@/lib/products";
 import hero from "@/assets/hero-necklace.jpg";
 import bridal from "@/assets/collection-bridal.jpg";
