@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Heart, Eye } from "lucide-react";
+import { LazyImage } from "@/components/LazyImage";
 import { type Product, formatINR } from "@/lib/products";
 import { toast } from "sonner";
 
@@ -15,10 +16,10 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
     >
       <Link to="/products/$id" params={{ id: product.id }} className="block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl glass shadow-luxe">
-          <img
+          <LazyImage
             src={product.image}
             alt={product.name}
-            loading="lazy"
+            wrapperClassName="h-full w-full"
             className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60" />

@@ -9,6 +9,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
+import { LazyImage } from "@/components/LazyImage";
 import { products, formatINR } from "@/lib/products";
 import { toast } from "sonner";
 
@@ -225,7 +226,7 @@ function Orders() {
                 {o.items.map((p) => (
                   <Link to="/products/$id" params={{ id: p.id }} key={p.id} className="flex items-center gap-3 group">
                     <div className="h-16 w-16 rounded-xl overflow-hidden glass shrink-0">
-                      <img loading="lazy" decoding="async" src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <LazyImage src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" wrapperClassName="h-full w-full" />
                     </div>
                     <div className="hidden sm:block">
                       <p className="text-sm group-hover:text-[color:var(--gold)] transition">{p.name}</p>
@@ -284,7 +285,7 @@ function Wishlist() {
               className="glass rounded-2xl overflow-hidden group"
             >
               <Link to="/products/$id" params={{ id: p.id }} className="block relative aspect-square overflow-hidden">
-                <img loading="lazy" decoding="async" src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <LazyImage src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" wrapperClassName="h-full w-full" />
                 <button onClick={(e) => { e.preventDefault(); remove(p.id); }} className="absolute top-2 right-2 h-8 w-8 rounded-full glass flex items-center justify-center hover:text-red-300">
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
@@ -419,7 +420,7 @@ function RecentlyViewed() {
           >
             <Link to="/products/$id" params={{ id: p.id }} className="block group">
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden glass">
-                <img loading="lazy" decoding="async" src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <LazyImage src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" wrapperClassName="h-full w-full" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60" />
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                   <span className="text-[10px] uppercase tracking-[0.25em] text-white/80 inline-flex items-center gap-1">

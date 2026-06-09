@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { ProductCard } from "@/components/ProductCard";
+import { LazyImage } from "@/components/LazyImage";
 import { products } from "@/lib/products";
 import hero from "@/assets/hero-necklace.jpg";
 import bridal from "@/assets/collection-bridal.jpg";
@@ -90,7 +91,7 @@ function Home() {
             className="lg:col-span-6 relative"
           >
             <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-luxe glass">
-              <img src={hero} alt="Diamond necklace" width={1600} height={1280} className="h-full w-full object-cover" />
+              <LazyImage src={hero} alt="Diamond necklace" eager width={1600} height={1280} wrapperClassName="h-full w-full" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
               <motion.div
                 animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity }}
@@ -149,7 +150,7 @@ function Home() {
                 viewport={{ once: true }} transition={{ duration: 0.7, delay: i * 0.1 }}
                 className="group relative aspect-[3/4] rounded-3xl overflow-hidden shadow-luxe"
               >
-                <img src={c.image} alt={c.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
+                <LazyImage src={c.image} alt={c.name} wrapperClassName="h-full w-full" className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-8">
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">{c.tag}</p>
@@ -187,7 +188,7 @@ function Home() {
             viewport={{ once: true }} transition={{ duration: 0.8 }}
             className="relative aspect-[5/4] rounded-3xl overflow-hidden shadow-luxe"
           >
-            <img src={craft} alt="Craftsmanship" loading="lazy" className="h-full w-full object-cover" />
+            <LazyImage src={craft} alt="Craftsmanship" wrapperClassName="h-full w-full" className="h-full w-full object-cover" />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }}
